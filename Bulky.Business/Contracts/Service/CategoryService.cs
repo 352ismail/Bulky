@@ -1,11 +1,11 @@
-﻿using BulkyWeb.Contracts.IService;
-using BulkyWeb.Data;
-using BulkyWeb.Generics;
-using BulkyWeb.Models;
+﻿using Bulky.Business.Contracts.IService;
+using Bulky.DataAccess.Data;
+using Bulky.Business.Generics;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
+using Bulky.Models.Models;
 
-namespace BulkyWeb.Contracts.Service
+namespace Bulky.Business.Contracts.Service
 {
     public class CategoryService : ICategoryService
     {

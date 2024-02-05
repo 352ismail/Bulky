@@ -1,7 +1,7 @@
-﻿using BulkyWeb.Generics;
-using BulkyWeb.Models;
+﻿using Bulky.Business.Generics;
+using Bulky.Models.Models;
 
-namespace BulkyWeb.Contracts.IService
+namespace Bulky.Business.Contracts.IService
 {
     public interface ICategoryService
     {
