@@ -1,3 +1,9 @@
+using BulkyWeb.Contracts.IService;
+using BulkyWeb.Contracts.Service;
+using BulkyWeb.Data;
+using BulkyWeb.Helpers;
+using Microsoft.EntityFrameworkCore;
+
 namespace BulkyWeb
 {
     public class Program
@@ -5,9 +11,12 @@ namespace BulkyWeb
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<ApplicationDbContext>(options=>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("ConnStr")));
 
             var app = builder.Build();
 
