@@ -1,12 +1,12 @@
-﻿using Bulky.Business.Contracts.IService;
-using Bulky.DataAccess.Data;
-using Bulky.Business.Generics;
+﻿using BulkyBook.Business.Contracts.IService;
+using BulkyBook.DataAccess.Data;
+using BulkyBook.Business.Generics;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
-using Bulky.Models.Models;
-using Bulky.Business.Repositories;
+using BulkyBook.Models.Models;
+using BulkyBook.Business.Repositories;
 
-namespace Bulky.Business.Contracts.Service
+namespace BulkyBook.Business.Contracts.Service
 {
     public class CategoryService : Repository<Category> ,ICategoryService
     {

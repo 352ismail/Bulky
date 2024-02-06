@@ -1,6 +1,6 @@
 ﻿
-using Bulky.Business.Repositories;
-using Bulky.DataAccess.Data;
+using BulkyBook.Business.Repositories;
+using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bulky.Business.Repositories
+namespace BulkyBook.Business.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {

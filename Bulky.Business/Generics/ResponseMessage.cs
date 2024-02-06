@@ -1,4 +1,4 @@
-﻿namespace Bulky.Business.Generics
+﻿namespace BulkyBook.Business.Generics
 {
     public class ResponseMessage
     {

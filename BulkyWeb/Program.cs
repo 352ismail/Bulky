@@ -1,7 +1,7 @@
-using Bulky.Business.Contracts.IService;
-using Bulky.Business.Contracts.Service;
-using Bulky.Business.Helpers;
-using Bulky.DataAccess.Data;
+using BulkyBook.Business.Contracts.IService;
+using BulkyBook.Business.Contracts.Service;
+using BulkyBook.Business.Helpers;
+using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulkyWeb

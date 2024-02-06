@@ -1,9 +1,9 @@
-﻿using Bulky.Business.Generics;
-using Bulky.Business.Repositories;
-using Bulky.Models.Models;
+﻿using BulkyBook.Business.Generics;
+using BulkyBook.Business.Repositories;
+using BulkyBook.Models.Models;
 
 
-namespace Bulky.Business.Contracts.IService
+namespace BulkyBook.Business.Contracts.IService
 {
     public interface ICategoryService: IRepository<Category>
     {

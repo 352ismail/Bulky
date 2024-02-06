@@ -1,6 +1,6 @@
-﻿using Bulky.Business.Contracts.IService;
-using Bulky.DataAccess.Data;
-using Bulky.Models.Models;
+﻿using BulkyBook.Business.Contracts.IService;
+using BulkyBook.DataAccess.Data;
+using BulkyBook.Models.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
