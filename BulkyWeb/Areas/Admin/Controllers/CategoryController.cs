@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 
-namespace BulkyWeb.Controllers
+namespace BulkyBookWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -34,7 +35,7 @@ namespace BulkyWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                 await _unitOfWork.CategoryService.AddAsync(category);
+                await _unitOfWork.CategoryService.AddAsync(category);
                 await _unitOfWork.SaveChangesAsync();
 
             }
@@ -46,17 +47,17 @@ namespace BulkyWeb.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(long? id)
         {
-            if(id is null || id == 0)
+            if (id is null || id == 0)
             {
                 return NotFound();
             }
-            var category = await _unitOfWork.CategoryService.GetAsync(x=>x.Id == id);
+            var category = await _unitOfWork.CategoryService.GetAsync(x => x.Id == id);
             return View(category);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(Category category)
         {
-            if(category is null)
+            if (category is null)
             {
                 return NotFound();
             }
@@ -76,7 +77,7 @@ namespace BulkyWeb.Controllers
             {
                 return NotFound();
             }
-            var category = await _unitOfWork.CategoryService.GetAsync(x=>x.Id == id);
+            var category = await _unitOfWork.CategoryService.GetAsync(x => x.Id == id);
             return View(category);
         }
         [HttpPost, ActionName("Delete")]
@@ -87,7 +88,7 @@ namespace BulkyWeb.Controllers
                 return NotFound();
             }
             var category = await _unitOfWork.CategoryService.GetAsync(x => x.Id == id);
-            if(category is null)
+            if (category is null)
             {
                 return NotFound();
 
