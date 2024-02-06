@@ -8,7 +8,5 @@ namespace BulkyBook.Business.Contracts.IService
     public interface ICategoryService: IRepository<Category>
     {
         Task UpdateAsync(Category category);
-        Task SaveChangesAsync();
-
     }
 }

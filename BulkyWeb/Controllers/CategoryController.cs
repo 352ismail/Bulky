@@ -1,4 +1,5 @@
 ﻿using BulkyBook.Business.Contracts.IService;
+using BulkyBook.Business.Repositories.UnitOfWork;
 using BulkyBook.DataAccess.Data;
 using BulkyBook.Models.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,14 @@ namespace BulkyWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryService = categoryService;
+            _unitOfWork = unitOfWork;
         }
         public async Task<IActionResult> Index()
         {
-            var categories = await _categoryService.GetAllAsync();
+            var categories = await _unitOfWork.CategoryService.GetAllAsync();
             return View(categories);
         }
         public IActionResult Create()
@@ -33,8 +34,8 @@ namespace BulkyWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                 await _categoryService.AddAsync(category);
-                await _categoryService.SaveChangesAsync();
+                 await _unitOfWork.CategoryService.AddAsync(category);
+                await _unitOfWork.SaveChangesAsync();
 
             }
             TempData["success"] = "Category created successfully";
@@ -49,7 +50,7 @@ namespace BulkyWeb.Controllers
             {
                 return NotFound();
             }
-            var category = await _categoryService.GetAsync(x=>x.Id == id);
+            var category = await _unitOfWork.CategoryService.GetAsync(x=>x.Id == id);
             return View(category);
         }
         [HttpPost]
@@ -61,8 +62,8 @@ namespace BulkyWeb.Controllers
             }
             if (ModelState.IsValid)
             {
-                await _categoryService.UpdateAsync(category);
-                await _categoryService.SaveChangesAsync();
+                await _unitOfWork.CategoryService.UpdateAsync(category);
+                await _unitOfWork.SaveChangesAsync();
             }
             TempData["success"] = "Category Updated successfully";
 
@@ -75,7 +76,7 @@ namespace BulkyWeb.Controllers
             {
                 return NotFound();
             }
-            var category = await _categoryService.GetAsync(x=>x.Id == id);
+            var category = await _unitOfWork.CategoryService.GetAsync(x=>x.Id == id);
             return View(category);
         }
         [HttpPost, ActionName("Delete")]
@@ -85,14 +86,14 @@ namespace BulkyWeb.Controllers
             {
                 return NotFound();
             }
-            var category = await _categoryService.GetAsync(x => x.Id == id);
+            var category = await _unitOfWork.CategoryService.GetAsync(x => x.Id == id);
             if(category is null)
             {
                 return NotFound();
 
             }
-            _categoryService.Remove(category);
-            await _categoryService.SaveChangesAsync();
+            _unitOfWork.CategoryService.Remove(category);
+            await _unitOfWork.SaveChangesAsync();
 
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction(nameof(Index));

@@ -15,12 +15,16 @@ namespace BulkyBook.Business.Contracts.Service
         {
             _context = context;
         }
-
-        public async Task SaveChangesAsync()
+        public async Task UpdateAsync(Category category)
         {
+            if (category is null)
+            {
+                throw new KeyNotFoundException("Category is null");
+            }
+            _context.Category.Update(category);
             await _context.SaveChangesAsync();
         }
-
+        #region Old Repository Pattern
         //public async Task<Category> Create(Category category)
         //{
         //    if(category is null)
@@ -59,16 +63,6 @@ namespace BulkyBook.Business.Contracts.Service
         //    return category;
 
         //}
-
-        public async Task UpdateAsync(Category category)
-        {
-            if (category is null)
-            {
-                throw new KeyNotFoundException("Category is null");
-            }
-            _context.Category.Update(category);
-            await _context.SaveChangesAsync();
-
-        }
+        #endregion
     }
 }
