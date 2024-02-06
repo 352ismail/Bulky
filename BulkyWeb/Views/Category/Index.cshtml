@@ -1,6 +1,7 @@
-﻿@model List<Category> 
-<div class="container bp-4">
-    <div class="row pt-4 pb-3">
+﻿@using Bulky.Models.Models
+@model List<Category> 
+<div class="container pb-5">
+    <div class="row pt-4 pb-6">
         <div class="col-6">
             <h4 class="text-primary display-6">CATEGORIES</h4>
         </div>
@@ -14,10 +15,11 @@
         </div>
     </div>
 
-<table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped text-center">
     <tr>
         <th>Name</th>
         <th>Order</th>
+        <th>Actions</th>
     </tr>
     @foreach(var category in Model.OrderBy(x=>x.DisplayOrder))
     {
@@ -26,11 +28,11 @@
         <td>@category.DisplayOrder</td>
         <td>
             <div class="w-30 btn-group" role="group">
-                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-outline-primary mx-2">
-                    <i class="bi bi-pencil-square"></i> Edit
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-primary mx-1">
+                    <i class="bi bi-pencil-square"></i> 
                 </a>
-                <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-outline-danger mx-2">
-                    <i class="bi bi-trash"></i> Delete
+                <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger mx-1">
+                    <i class="bi bi-trash"></i> 
                 </a>
             </div>
         </td>
