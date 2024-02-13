@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Bulky.Business.Helpers
+namespace BulkyBook.Business.Helpers
 {
     public class AutoMapperProfile:Profile
     {

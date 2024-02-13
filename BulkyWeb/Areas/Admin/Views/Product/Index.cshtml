@@ -1,0 +1,54 @@
+﻿@using BulkyBook.Models.Models.Products
+@model List<Product>
+<div class="container pb-5">
+    <div class="row pt-4 pb-6">
+        <div class="col-6">
+            <h4 class="text-primary display-6">PRODUCTS</h4>
+        </div>
+        <div class="col-6 text-end">
+            <h3 class="text-primary">
+                <a asp-controller="Product" asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    Create new Product
+                </a>
+            </h3>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped text-center">
+        <tr>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Author</th>
+            <th>Description</th>
+            <th>List Price</th>
+            <th>Price</th>
+            <th>Price for more than 50</th>
+            <th>Price for more than 100</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var product in Model.OrderBy(x => x.Id))
+        {
+            <tr>
+                <td>@product.Title</td>
+                <td>@product.ISBN</td>
+                <td>@product.Author</td>
+                <td>@product.Description</td>
+                <td>@product.ListPrice</td>
+                <td>@product.Price</td>
+                <td>@product.Price50</td>
+                <td>@product.Price100</td>
+                <td>
+                    <div class="w-30 btn-group" role="group">
+                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary mx-1">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger mx-1">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

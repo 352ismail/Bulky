@@ -1,12 +1,12 @@
-﻿using Bulky.Business.Contracts.IService;
-using Bulky.DataAccess.Data;
-using Bulky.Business.Generics;
+﻿using BulkyBook.Business.Contracts.IService;
+using BulkyBook.DataAccess.Data;
+using BulkyBook.Business.Generics;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
-using Bulky.Models.Models;
-using Bulky.Business.Repositories;
+using BulkyBook.Models.Models;
+using BulkyBook.Business.Repositories;
 
-namespace Bulky.Business.Contracts.Service
+namespace BulkyBook.Business.Contracts.Service
 {
     public class CategoryService : Repository<Category> ,ICategoryService
     {
@@ -15,12 +15,16 @@ namespace Bulky.Business.Contracts.Service
         {
             _context = context;
         }
-
-        public async Task SaveChangesAsync()
+        public async Task UpdateAsync(Category category)
         {
+            if (category is null)
+            {
+                throw new KeyNotFoundException("Category is null");
+            }
+            _context.Category.Update(category);
             await _context.SaveChangesAsync();
         }
-
+        #region Old Repository Pattern
         //public async Task<Category> Create(Category category)
         //{
         //    if(category is null)
@@ -59,16 +63,6 @@ namespace Bulky.Business.Contracts.Service
         //    return category;
 
         //}
-
-        public async Task UpdateAsync(Category category)
-        {
-            if (category is null)
-            {
-                throw new KeyNotFoundException("Category is null");
-            }
-            _context.Category.Update(category);
-            await _context.SaveChangesAsync();
-
-        }
+        #endregion
     }
 }

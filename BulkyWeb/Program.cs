@@ -1,7 +1,8 @@
-using Bulky.Business.Contracts.IService;
-using Bulky.Business.Contracts.Service;
-using Bulky.Business.Helpers;
-using Bulky.DataAccess.Data;
+using BulkyBook.Business.Contracts.IService;
+using BulkyBook.Business.Contracts.Service;
+using BulkyBook.Business.Helpers;
+using BulkyBook.Business.Repositories.UnitOfWork;
+using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulkyWeb
@@ -11,7 +12,7 @@ namespace BulkyWeb
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -37,7 +38,7 @@ namespace BulkyWeb
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
