@@ -13,10 +13,12 @@ namespace BulkyBook.Business.Repositories.UnitOfWork
     {
         private readonly ApplicationDbContext _context;
         public ICategoryService CategoryService { get; private set; }
+        public IProductService ProductService { get; private set; }
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
             CategoryService = new CategoryService(_context);
+            ProductService = new ProductService(_context);
         }
         public async Task SaveChangesAsync()
         {

@@ -10,6 +10,7 @@ namespace BulkyBook.Business.Repositories.UnitOfWork
     public interface IUnitOfWork
     {
         ICategoryService CategoryService { get; }
+        IProductService ProductService { get; }
         Task SaveChangesAsync();
     }
 }
