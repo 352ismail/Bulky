@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBook.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240213112204_Add-Products-table")]
-    partial class AddProductstable
+    [Migration("20240214101613_add-image-url")]
+    partial class addimageurl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,10 +119,16 @@ namespace BulkyBook.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ISBN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ListPrice")
@@ -143,6 +149,8 @@ namespace BulkyBook.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
 
                     b.HasData(
@@ -150,6 +158,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 1L,
                             Author = "Robert Wilson",
+                            CategoryId = 2L,
                             Description = "Book is about Adventures",
                             ISBN = "12321",
                             ListPrice = 20.5,
@@ -162,6 +171,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 2L,
                             Author = "Alice Johnson",
+                            CategoryId = 3L,
                             Description = "Exciting journey into the unknown",
                             ISBN = "23432",
                             ListPrice = 22.75,
@@ -174,6 +184,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 3L,
                             Author = "John Smith",
+                            CategoryId = 2L,
                             Description = "Unraveling secrets and enigmas",
                             ISBN = "34543",
                             ListPrice = 18.989999999999998,
@@ -186,6 +197,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 4L,
                             Author = "Emily Brown",
+                            CategoryId = 5L,
                             Description = "Magical realms and mythical creatures",
                             ISBN = "45654",
                             ListPrice = 25.989999999999998,
@@ -198,6 +210,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 5L,
                             Author = "David Jones",
+                            CategoryId = 4L,
                             Description = "Exploring futuristic worlds and technology",
                             ISBN = "56765",
                             ListPrice = 29.989999999999998,
@@ -210,6 +223,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 6L,
                             Author = "Sophia Lee",
+                            CategoryId = 3L,
                             Description = "Heartwarming love stories",
                             ISBN = "67876",
                             ListPrice = 15.949999999999999,
@@ -222,6 +236,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 7L,
                             Author = "Michael White",
+                            CategoryId = 2L,
                             Description = "Nerve-wracking suspense and excitement",
                             ISBN = "78987",
                             ListPrice = 21.5,
@@ -234,6 +249,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 8L,
                             Author = "Elizabeth Taylor",
+                            CategoryId = 6L,
                             Description = "Journeys through historical events and periods",
                             ISBN = "89098",
                             ListPrice = 27.75,
@@ -246,6 +262,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 9L,
                             Author = "Thomas Harris",
+                            CategoryId = 3L,
                             Description = "Terrifying tales of fear and horror",
                             ISBN = "90109",
                             ListPrice = 19.989999999999998,
@@ -258,6 +275,7 @@ namespace BulkyBook.DataAccess.Migrations
                         {
                             Id = 10L,
                             Author = "Anna Miller",
+                            CategoryId = 8L,
                             Description = "Inspirational life stories",
                             ISBN = "01210",
                             ListPrice = 16.5,
@@ -266,6 +284,17 @@ namespace BulkyBook.DataAccess.Migrations
                             Price50 = 13.5,
                             Title = "Biography"
                         });
+                });
+
+            modelBuilder.Entity("BulkyBook.Models.Models.Products.Product", b =>
+                {
+                    b.HasOne("BulkyBook.Models.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
