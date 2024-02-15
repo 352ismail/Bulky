@@ -25,15 +25,31 @@ namespace BulkyBook.Business.Repositories
             await dbSet.AddAsync(entity);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter, string? IncludeProperties = null)
         {
            IQueryable<T> query = dbSet.Where(filter);
+            if (!string.IsNullOrEmpty(IncludeProperties))
+            {
+                foreach (var IncludeProperty in IncludeProperties.
+                    Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(IncludeProperty);
+                }
+            }
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(string? IncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if(!string.IsNullOrEmpty(IncludeProperties))
+            {
+                foreach(var IncludeProperty in IncludeProperties.
+                    Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(IncludeProperty);
+                }
+            }
             return await query.ToListAsync();
         }
 

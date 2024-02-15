@@ -13,6 +13,7 @@ namespace BulkyWeb
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IFileBaseService,FileBaseService>();
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
             // Add services to the container.
             builder.Services.AddControllersWithViews();

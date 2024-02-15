@@ -1,6 +1,7 @@
 ﻿using BulkyBook.Business.Contracts.IService;
 using BulkyBook.Business.Repositories.UnitOfWork;
 using BulkyBook.Business.ViewModel;
+using BulkyBook.Models.Models;
 using BulkyBook.Models.Models.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,13 +13,16 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+
         }
         public async Task<IActionResult> Index()
         {
-            var products = await _unitOfWork.ProductService.GetAllAsync();
+            var products = await _unitOfWork.ProductService.GetAllAsync(IncludeProperties: nameof(Category));
             return View(products);
         }
 
@@ -27,7 +31,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             var productViewModel = new ProductViewModel
             {
-                CategoryList = _unitOfWork.CategoryService.GetAllAsync().Result
+                CategoryList = _unitOfWork.CategoryService.GetAllAsync(IncludeProperties: nameof(Category)).Result
                 .Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -41,7 +45,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 return View(productViewModel);
             }
             //For Update
-            productViewModel.Product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id);
+            productViewModel.Product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id, IncludeProperties: nameof(Category));
             if (productViewModel.Product is null)
             {
                 return NotFound();
@@ -75,7 +79,26 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(productViewModel.Product.Id == 0)
+                string rootpath = _webHostEnvironment.WebRootPath;
+                if (file is not null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    string extension = Path.GetExtension(file.FileName);
+                    string path = Path.Combine(rootpath, @"images\product", fileName + extension);
+                    if (!string.IsNullOrEmpty(productViewModel.Product.ImageUrl))
+                    {
+                        //Delete OldImage
+                        var oldImage = Path.Combine(rootpath, productViewModel.Product.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImage))
+                        {
+                            System.IO.File.Delete(oldImage);
+                        }
+                    }
+                    using FileStream fileStream = new FileStream(path, FileMode.Create);
+                    await file.CopyToAsync(fileStream);
+                    productViewModel.Product.ImageUrl = @"\images\product\" + fileName + extension;
+                }
+                if (productViewModel.Product.Id == 0)
                 {
                     await _unitOfWork.ProductService.AddAsync(productViewModel.Product);
                     await _unitOfWork.SaveChangesAsync();
@@ -87,7 +110,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 TempData["success"] = "Product updated successfully";
                 return RedirectToAction(nameof(Index));
             }
-            productViewModel.CategoryList = _unitOfWork.CategoryService.GetAllAsync().Result
+            productViewModel.CategoryList = _unitOfWork.CategoryService.GetAllAsync(IncludeProperties: nameof(Category)).Result
            .Select(x => new SelectListItem
            {
                Text = x.Name,
@@ -96,28 +119,10 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             return View(productViewModel);
 
         }
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(long id)
-        //{
-        //    var product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id);
-        //    if(product is null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(product);
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(Product product)
-        //{
-        //    await _unitOfWork.ProductService.UpdateAsync(product);
-        //    await _unitOfWork.SaveChangesAsync();
-        //    TempData["success"] = "Product updated successfully";
-        //    return RedirectToAction(nameof(Index));
-        //}
         [HttpGet]
         public async Task<IActionResult> Delete(long? id)
         {
-            var product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id);
+            var product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id, IncludeProperties: nameof(Category));
             if (product is null)
             {
                 return NotFound();
@@ -128,15 +133,23 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> DeletePost(long id)
         {
-            var product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id);
-            if(product is null)
+            var product = await _unitOfWork.ProductService.GetAsync(x => x.Id == id, IncludeProperties: nameof(Category));
+            if (product is null)
             {
                 return NotFound();
             }
-             _unitOfWork.ProductService.Remove(product);
+            _unitOfWork.ProductService.Remove(product);
             await _unitOfWork.SaveChangesAsync();
             TempData["success"] = "Product deleted successfully";
             return RedirectToAction(nameof(Index));
+        }
+
+        //Return Json data for Data Table
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var products = await _unitOfWork.ProductService.GetAllAsync(IncludeProperties: nameof(Category));
+            return Json(new { data = products });
         }
     }
 }
